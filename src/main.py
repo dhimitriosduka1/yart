@@ -1,5 +1,7 @@
-from src.utils import write_ppm
+from src.utils import write_ppm, write_color
 from tqdm import tqdm
+
+from src.vec3 import Vec3
 
 if __name__ == '__main__':
     columns = 256
@@ -12,11 +14,7 @@ if __name__ == '__main__':
             r = j / (columns - 1)
             g = i / (rows - 1)
             b = 0.25
-
-            ir = int(255.999 * r)
-            ig = int(255.999 * g)
-            ib = int(255.999 * b)
-
-            data.append([ir, ig, ib])
+            color = Vec3(r, g, b)
+            data.append(color)
 
     write_ppm(data, rows, columns, "output.ppm")
