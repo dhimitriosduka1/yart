@@ -7,8 +7,8 @@ from src.vec3 import Vec3
 if __name__ == '__main__':
 
     aspect_ration = 16.0 / 9.0
-    rows = 400
-    columns = int(rows / aspect_ration)
+    image_width = 400
+    image_height = int(image_width / aspect_ration)
 
     viewport_height = 2.0
     viewport_width = viewport_height * aspect_ration
@@ -23,14 +23,14 @@ if __name__ == '__main__':
 
     data = []
 
-    for j in tqdm(range(columns - 1, 0, -1)):
-        for i in range(rows):
-            u = float(i) / (columns - 1)
-            v = float(j) / (rows - 1)
+    for j in tqdm(range(image_height - 1, 0, -1)):
+        for i in range(image_width):
+            u = float(i) / (image_width - 1)
+            v = float(j) / (image_height - 1)
 
             ray = Ray(origin, lower_left_corner + u * horizontal + v * vertical - origin)
             color = ray_color(ray)
 
             data.append(color)
 
-    write_ppm(data, rows, columns, "output.ppm")
+    write_ppm(data, image_width, image_height, "../output/output.ppm")
