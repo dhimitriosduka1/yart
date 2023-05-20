@@ -1,3 +1,4 @@
+import unittest
 from math import sqrt
 from unittest import TestCase
 
@@ -10,60 +11,6 @@ class TestVec3(TestCase):
         self.vec: Vec3 = Vec3(2.0, 4.0, 6.0)
         self.other_vec: Vec3 = Vec3(1.0, 2.0, 3.0)
         self.t: float = 2.0
-
-    def test_neg(self):
-        vec = -self.vec
-        self.assertEqual(vec[0], -2.0)
-        self.assertEqual(vec[1], -4.0)
-        self.assertEqual(vec[2], -6.0)
-
-    def test_sub_number(self):
-        vec = self.vec - self.t
-        self.assertEqual(vec[0], 0.0)
-        self.assertEqual(vec[1], 2.0)
-        self.assertEqual(vec[2], 4.0)
-
-    def test_sub_vec(self):
-        vec = self.vec - self.other_vec
-        self.assertEqual(vec[0], 1.0)
-        self.assertEqual(vec[1], 2.0)
-        self.assertEqual(vec[2], 3.0)
-
-    def test_mul_number_right(self):
-        vec = self.vec * self.t
-        self.assertEqual(vec[0], 4.0)
-        self.assertEqual(vec[1], 8.0)
-        self.assertEqual(vec[2], 12.0)
-
-    def test_mul_number_left(self):
-        vec = self.t * self.vec
-        self.assertEqual(vec[0], 4.0)
-        self.assertEqual(vec[1], 8.0)
-        self.assertEqual(vec[2], 12.0)
-
-    def test_mul_vec(self):
-        vec = self.vec * self.other_vec
-        self.assertEqual(vec[0], 2.0)
-        self.assertEqual(vec[1], 8.0)
-        self.assertEqual(vec[2], 18.0)
-
-    def test_add_vec(self):
-        vec = self.vec + self.other_vec
-        self.assertEqual(vec[0], 3.0)
-        self.assertEqual(vec[1], 6.0)
-        self.assertEqual(vec[2], 9.0)
-
-    def test_add_number(self):
-        vec = self.vec + self.t
-        self.assertEqual(vec[0], 4.0)
-        self.assertEqual(vec[1], 6.0)
-        self.assertEqual(vec[2], 8.0)
-
-    def test_true_div(self):
-        vec = self.vec / self.t
-        self.assertEqual(vec[0], 1.0)
-        self.assertEqual(vec[1], 2.0)
-        self.assertEqual(vec[2], 3.0)
 
     def test_length(self):
         length = self.vec.length()
@@ -88,3 +35,80 @@ class TestVec3(TestCase):
         self.assertEqual(cross[0], 2.0 / sqrt(56))
         self.assertEqual(cross[1], 4.0 / sqrt(56))
         self.assertEqual(cross[2], 6.0 / sqrt(56))
+
+    def test_neg(self):
+        vec = -self.vec
+        self.assertEqual(vec[0], -2.0)
+        self.assertEqual(vec[1], -4.0)
+        self.assertEqual(vec[2], -6.0)
+
+    def test_iadd_vec(self):
+        vec = Vec3(1.0, 2.0, 3.0)
+        other = Vec3(1.0, 2.0, 3.0)
+        vec += other
+        self.assertEqual(vec[0], 2.0)
+        self.assertEqual(vec[1], 4.0)
+        self.assertEqual(vec[2], 6.0)
+
+    def test_imul(self):
+        vec = Vec3(1.0, 2.0, 3.0)
+        t = 3.0
+        vec *= t
+        self.assertEqual(vec[0], 3.0)
+        self.assertEqual(vec[1], 6.0)
+        self.assertEqual(vec[2], 9.0)
+
+    def test_imul_must_fail_wrong_type(self):
+        vec = Vec3(1.0, 2.0, 3.0)
+        other = Vec3(1.0, 2.0, 3.0)
+        self.assertRaises(AssertionError, vec.__imul__, other)
+
+    def test_itruediv(self):
+        vec = Vec3(1.0, 2.0, 3.0)
+        t = 3.0
+        vec *= t
+        self.assertEqual(vec[0], 3.0)
+        self.assertEqual(vec[1], 6.0)
+        self.assertEqual(vec[2], 9.0)
+
+    def test_itruediv_must_fail_wrong_type(self):
+        self.assertRaises(AssertionError, self.vec.__itruediv__, self.other_vec)
+
+    def test_itruediv_must_fail_forbidden_value(self):
+        self.assertRaises(AssertionError, self.vec.__itruediv__, 0.0)
+
+    def test_add_vec(self):
+        vec = self.vec + self.other_vec
+        self.assertEqual(vec[0], 3.0)
+        self.assertEqual(vec[1], 6.0)
+        self.assertEqual(vec[2], 9.0)
+
+    def test_sub_vec(self):
+        vec = self.vec - self.other_vec
+        self.assertEqual(vec[0], 1.0)
+        self.assertEqual(vec[1], 2.0)
+        self.assertEqual(vec[2], 3.0)
+
+    def test_mul_vec(self):
+        vec = self.vec * self.other_vec
+        self.assertEqual(vec[0], 2.0)
+        self.assertEqual(vec[1], 8.0)
+        self.assertEqual(vec[2], 18.0)
+
+    def test_mul_number_left(self):
+        vec = self.t * self.vec
+        self.assertEqual(vec[0], 4.0)
+        self.assertEqual(vec[1], 8.0)
+        self.assertEqual(vec[2], 12.0)
+
+    def test_mul_number_right(self):
+        vec = self.vec * self.t
+        self.assertEqual(vec[0], 4.0)
+        self.assertEqual(vec[1], 8.0)
+        self.assertEqual(vec[2], 12.0)
+
+    def test_true_div(self):
+        vec = self.vec / self.t
+        self.assertEqual(vec[0], 1.0)
+        self.assertEqual(vec[1], 2.0)
+        self.assertEqual(vec[2], 3.0)
