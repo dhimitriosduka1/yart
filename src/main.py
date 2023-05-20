@@ -1,5 +1,5 @@
 from src.ray import Ray
-from src.utils import write_ppm, write_color
+from src.utils import write_ppm, ray_color
 from tqdm import tqdm
 
 from src.vec3 import Vec3
@@ -29,7 +29,7 @@ if __name__ == '__main__':
             v = float(j) / (rows - 1)
 
             ray = Ray(origin, lower_left_corner + u * horizontal + v * vertical - origin)
-            color = ray.ray_color()
+            color = ray_color(ray)
 
             data.append(color)
 
