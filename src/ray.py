@@ -15,9 +15,8 @@ class Ray:
     def at(self, t):
         return self.origin + t * self.direction
 
-    @staticmethod
-    def ray_color(ray):
-        unit_direction: Vec3 = Vec3.unit_vector(ray.direction)
+    def ray_color(self):
+        unit_direction: Vec3 = Vec3.unit_vector(self.direction)
         t = 0.5 * (unit_direction.y() + 1.0)
         return (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0)
 

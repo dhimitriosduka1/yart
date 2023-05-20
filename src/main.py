@@ -23,13 +23,13 @@ if __name__ == '__main__':
 
     data = []
 
-    for j in tqdm(range(rows - 1, 0, -1)):
-        for i in range(columns):
+    for j in tqdm(range(columns - 1, 0, -1)):
+        for i in range(rows):
             u = float(i) / (columns - 1)
             v = float(j) / (rows - 1)
 
             ray = Ray(origin, lower_left_corner + u * horizontal + v * vertical - origin)
-            color = Ray.ray_color(ray)
+            color = ray.ray_color()
 
             data.append(color)
 
