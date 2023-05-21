@@ -8,18 +8,21 @@ from src.ray import Ray
 from src.vec3 import Vec3
 
 
-def write_ppm(data, rows, cols, path):
+def write_ppm(data, rows, cols, path, sample_per_pixel):
     with open(path, "w") as image:
         image.write("P3\n")
         image.write(f"{rows} {cols}\n")
         image.write("255\n")
 
         for color in data:
-            write_color(color, image)
+            write_color(color, image, sample_per_pixel)
 
 
-def write_color(color: Vec3, stream):
-    stream.write(f"{int(255.999 * color[0])} {int(255.999 * color[1])} {int(255.999 * color[2])}\n")
+def write_color(color: Vec3, stream, sample_per_pixel: int):
+    components = [color.x(), color.y(), color.z()]
+    scale = 1.0 / sample_per_pixel
+    components = list(map(lambda c: 256 * (clamp(c * scale, 0.0, 0.999)), components))
+    stream.write(f"{int(components[0])} {int(components[1])} {int(components[2])}\n")
 
 
 def hit_sphere(center: Vec3, radius: float, ray: Ray):
@@ -50,3 +53,11 @@ def random_float():
 
 def random_float_with_constraints(lower: float, upper: float):
     return lower + (upper - lower) * random.Random().random()
+
+
+def clamp(x: float, lower: float, upper: float) -> float:
+    if x < lower:
+        return lower
+    if x > upper:
+        return upper
+    return x
