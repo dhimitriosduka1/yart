@@ -6,10 +6,10 @@ class Ray:
         self.origin: Vec3 = origin
         self.direction: Vec3 = direction
 
-    def origin(self):
+    def origin(self) -> Vec3:
         return self.origin
 
-    def direction(self):
+    def direction(self) -> Vec3:
         return self.direction
 
     def at(self, t):

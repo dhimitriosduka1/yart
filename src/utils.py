@@ -20,9 +20,9 @@ def write_color(color: Vec3, stream):
 
 def hit_sphere(center: Vec3, radius: float, ray: Ray):
     oc = ray.origin - center
-    a = Vec3.dot(ray.direction, ray.direction)
+    a = ray.direction.length_squared()
     b = 2.0 * Vec3.dot(oc, ray.direction)
-    c = Vec3.dot(oc, oc) - radius * radius
+    c = oc.length_squared() - radius * radius
     discriminant = (b * b - 4 * a * c)
     return -1.0 if discriminant < 0 else ((-b - sqrt(discriminant)) / (2.0 * a))
 
