@@ -1,3 +1,4 @@
+import random
 from math import sqrt
 
 from src.constants import PI, INFINITY
@@ -41,3 +42,11 @@ def ray_color(ray: Ray, world: Hittable):
 
 def degrees_to_radians(degrees: float):
     return degrees * PI / 180.0
+
+
+def random_float():
+    return random.Random().random()
+
+
+def random_float_with_constraints(lower: float, upper: float):
+    return lower + (upper - lower) * random.Random().random()
