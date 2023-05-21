@@ -1,5 +1,8 @@
 from math import sqrt
 
+from src.constants import PI, INFINITY
+from src.hittable.hit_record import HitRecord
+from src.hittable.hittable import Hittable
 from src.ray import Ray
 from src.vec3 import Vec3
 
@@ -27,11 +30,14 @@ def hit_sphere(center: Vec3, radius: float, ray: Ray):
     return -1.0 if discriminant < 0 else ((-b - sqrt(discriminant)) / (2.0 * a))
 
 
-def ray_color(ray: Ray):
-    t = hit_sphere(Vec3(0.0, 0.0, -1.0), 0.5, ray)
-    if t > 0.0:
-        normal: Vec3 = Vec3.unit_vector(ray.at(t) - Vec3(0.0, 0.0, -1.0))
-        return 0.5 * Vec3(normal.x() + 1, normal.y() + 1, normal.z() + 1)
+def ray_color(ray: Ray, world: Hittable):
+    hit_record: HitRecord = world.hit(ray, 0, INFINITY)
+    if hit_record is not None:
+        return 0.5 * (hit_record.normal + Vec3(1.0, 1.0, 1.0))
     unit_direction: Vec3 = Vec3.unit_vector(ray.direction)
     t = 0.5 * (unit_direction.y() + 1.0)
     return (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0)
+
+
+def degrees_to_radians(degrees: float):
+    return degrees * PI / 180.0
