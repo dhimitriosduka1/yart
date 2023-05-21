@@ -7,5 +7,5 @@ from src.ray import Ray
 class Hittable(ABC):
 
     @abstractmethod
-    def hit(self, ray: Ray, t_min: float, t_max: float, hit_record: HitRecord) -> bool:
-        return False
+    def hit(self, ray: Ray, t_min: float, t_max: float) -> [HitRecord, None]:
+        pass
