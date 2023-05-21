@@ -1,3 +1,5 @@
+from src.hittable.hittable_list import HittableList
+from src.hittable.sphere import Sphere
 from src.ray import Ray
 from src.utils import write_ppm, ray_color
 from tqdm import tqdm
@@ -21,6 +23,10 @@ if __name__ == '__main__':
     # This means that the z axis penetrates the viewport exactly in the middle
     lower_left_corner = origin - (horizontal / 2) - (vertical / 2) - Vec3(0.0, 0.0, focal_length)
 
+    hittable_list: HittableList = HittableList()
+    hittable_list.add(Sphere(Vec3(0.0, 0.0, -1.0), 0.5))
+    hittable_list.add(Sphere(Vec3(0.0, -100.5, -1.0), 100))
+
     data = []
 
     for j in tqdm(range(image_height - 1, 0, -1)):
@@ -29,7 +35,7 @@ if __name__ == '__main__':
             v = float(j) / (image_height - 1)
 
             ray = Ray(origin, lower_left_corner + u * horizontal + v * vertical - origin)
-            color = ray_color(ray)
+            color = ray_color(ray, hittable_list)
 
             data.append(color)
 
