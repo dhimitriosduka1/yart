@@ -1,9 +1,9 @@
-from src.hittable.hittable_list import HittableList
-from src.hittable.sphere import Sphere
-from src.ray import Ray
-from src.utils import write_ppm, ray_color
 from tqdm import tqdm
 
+from src.camera import Camera
+from src.hittable.hittable_list import HittableList
+from src.hittable.sphere import Sphere
+from src.utils import write_ppm, ray_color
 from src.vec3 import Vec3
 
 if __name__ == '__main__':
@@ -12,16 +12,7 @@ if __name__ == '__main__':
     image_width = 400
     image_height = int(image_width / aspect_ration)
 
-    viewport_height = 2.0
-    viewport_width = viewport_height * aspect_ration
-    focal_length = 1.0
-
-    origin = Vec3(0.0, 0.0, 0.0)
-    horizontal = Vec3(viewport_width, 0.0, 0.0)
-    vertical = Vec3(0.0, viewport_height, 0.0)
-
-    # This means that the z axis penetrates the viewport exactly in the middle
-    lower_left_corner = origin - (horizontal / 2) - (vertical / 2) - Vec3(0.0, 0.0, focal_length)
+    camera: Camera = Camera()
 
     hittable_list: HittableList = HittableList()
     hittable_list.add(Sphere(Vec3(0.0, 0.0, -1.0), 0.5))
@@ -34,7 +25,7 @@ if __name__ == '__main__':
             u = float(i) / (image_width - 1)
             v = float(j) / (image_height - 1)
 
-            ray = Ray(origin, lower_left_corner + u * horizontal + v * vertical - origin)
+            ray = camera.get_ray(u, v)
             color = ray_color(ray, hittable_list)
 
             data.append(color)
