@@ -12,6 +12,7 @@ if __name__ == '__main__':
     IMAGE_WIDTH = 400
     IMAGE_HEIGHT = int(IMAGE_WIDTH / ASPECT_RATIO)
     SAMPLES_PER_PIXEL = 100
+    MAX_DEPTH = 50
 
     camera: Camera = Camera()
 
@@ -28,7 +29,7 @@ if __name__ == '__main__':
                 u = float(i + random_float()) / (IMAGE_WIDTH - 1)
                 v = float(j + random_float()) / (IMAGE_HEIGHT - 1)
                 ray = camera.get_ray(u, v)
-                pixel_color += ray_color(ray, hittable_list)
+                pixel_color += ray_color(ray, hittable_list, MAX_DEPTH)
             data.append(pixel_color)
 
     write_ppm(data, IMAGE_WIDTH, IMAGE_HEIGHT, "../output/output.ppm", SAMPLES_PER_PIXEL)

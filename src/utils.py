@@ -34,10 +34,13 @@ def hit_sphere(center: Vec3, radius: float, ray: Ray):
     return -1.0 if discriminant < 0 else ((-b - sqrt(discriminant)) / (2.0 * a))
 
 
-def ray_color(ray: Ray, world: Hittable):
+def ray_color(ray: Ray, world: Hittable, depth: int):
+    if depth <= 0:
+        return Vec3()
     hit_record: HitRecord = world.hit(ray, 0, INFINITY)
     if hit_record is not None:
-        return 0.5 * (hit_record.normal + Vec3(1.0, 1.0, 1.0))
+        target = hit_record.point + hit_record.normal + random_in_unit_sphere()
+        return 0.5 * ray_color(Ray(hit_record.point, target - hit_record.point), world, depth - 1)
     unit_direction: Vec3 = Vec3.unit_vector(ray.direction)
     t = 0.5 * (unit_direction.y() + 1.0)
     return (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0)
@@ -53,6 +56,23 @@ def random_float():
 
 def random_float_with_constraints(lower: float, upper: float):
     return lower + (upper - lower) * random.Random().random()
+
+
+def random_in_unit_sphere():
+    while True:
+        random_vector = random_vec_with_constraints(-1, 1)
+        if random_vector.length() < 1:
+            return random_vector
+
+
+def random_vec():
+    return Vec3(random_float(), random_float(), random_float())
+
+
+def random_vec_with_constraints(lower: float, upper: float):
+    return Vec3(random_float_with_constraints(lower, upper),
+                random_float_with_constraints(lower, upper),
+                random_float_with_constraints(lower, upper))
 
 
 def clamp(x: float, lower: float, upper: float) -> float:
