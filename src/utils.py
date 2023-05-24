@@ -21,7 +21,7 @@ def write_ppm(data, rows, cols, path, sample_per_pixel):
 def write_color(color: Vec3, stream, sample_per_pixel: int):
     components = [color.x(), color.y(), color.z()]
     scale = 1.0 / sample_per_pixel
-    components = list(map(lambda c: 256 * (clamp(c * scale, 0.0, 0.999)), components))
+    components = list(map(lambda c: 256 * (clamp(sqrt(c * scale), 0.0, 0.999)), components))
     stream.write(f"{int(components[0])} {int(components[1])} {int(components[2])}\n")
 
 
@@ -37,9 +37,9 @@ def hit_sphere(center: Vec3, radius: float, ray: Ray):
 def ray_color(ray: Ray, world: Hittable, depth: int):
     if depth <= 0:
         return Vec3()
-    hit_record: HitRecord = world.hit(ray, 0, INFINITY)
+    hit_record: HitRecord = world.hit(ray, 0.001, INFINITY)
     if hit_record is not None:
-        target = hit_record.point + hit_record.normal + random_in_unit_sphere()
+        target = hit_record.point + hit_record.normal + random_unit_vector()
         return 0.5 * ray_color(Ray(hit_record.point, target - hit_record.point), world, depth - 1)
     unit_direction: Vec3 = Vec3.unit_vector(ray.direction)
     t = 0.5 * (unit_direction.y() + 1.0)
@@ -73,6 +73,10 @@ def random_vec_with_constraints(lower: float, upper: float):
     return Vec3(random_float_with_constraints(lower, upper),
                 random_float_with_constraints(lower, upper),
                 random_float_with_constraints(lower, upper))
+
+
+def random_unit_vector():
+    return Vec3.unit_vector(random_in_unit_sphere())
 
 
 def clamp(x: float, lower: float, upper: float) -> float:
